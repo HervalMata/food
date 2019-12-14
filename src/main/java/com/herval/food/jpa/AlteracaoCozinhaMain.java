@@ -7,12 +7,10 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-import java.util.List;
-
 /*
- * Criado Por Herval Mata em 13/12/2019
+ * Criado Por Herval Mata em 14/12/2019
  */
-public class ConsultaCozinhaMain {
+public class AlteracaoCozinhaMain {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new SpringApplicationBuilder(FoodApplication.class)
@@ -21,10 +19,10 @@ public class ConsultaCozinhaMain {
 
         CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
 
-        List<Cozinha> cozinhas = cozinhaRepository.listar();
+        Cozinha cozinha = new Cozinha();
+        cozinha.setId(1L);
+        cozinha.setNome("Brasileira");
 
-        for (Cozinha cozinha : cozinhas) {
-            System.out.println(cozinha.getNome());
-        }
+        cozinhaRepository.salvar(cozinha);
     }
 }

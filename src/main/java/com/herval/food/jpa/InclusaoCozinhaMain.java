@@ -7,12 +7,10 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-import java.util.List;
-
 /*
- * Criado Por Herval Mata em 13/12/2019
+ * Criado Por Herval Mata em 14/12/2019
  */
-public class ConsultaCozinhaMain {
+public class InclusaoCozinhaMain {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new SpringApplicationBuilder(FoodApplication.class)
@@ -21,10 +19,16 @@ public class ConsultaCozinhaMain {
 
         CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
 
-        List<Cozinha> cozinhas = cozinhaRepository.listar();
+        Cozinha cozinha1 = new Cozinha();
+        cozinha1.setNome("Brasileira");
 
-        for (Cozinha cozinha : cozinhas) {
-            System.out.println(cozinha.getNome());
-        }
+        Cozinha cozinha2 = new Cozinha();
+        cozinha2.setNome("Japonesa");
+
+        cozinha1 = cozinhaRepository.salvar(cozinha1);
+        cozinha2 = cozinhaRepository.salvar(cozinha2);
+
+        System.out.printf("%d - %s\n", cozinha1.getId(), cozinha1.getNome());
+        System.out.printf("%d - %s\n", cozinha2.getId(), cozinha2.getNome());
     }
 }
