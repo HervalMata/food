@@ -1,7 +1,7 @@
 package com.herval.food.domain.service;
 
 import com.herval.food.domain.exception.EntidadeEmUsoException;
-import com.herval.food.domain.exception.EntidadeNaoEncontradaException;
+import com.herval.food.domain.exception.EstadoNaoEncontradoException;
 import com.herval.food.domain.model.Estado;
 import com.herval.food.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class EstadoService {
 
+    private static final String MSG_ESTADO_EM_USO = "Estado de código %d não pode ser removida, pois está em uso";
+    private static final String MSG_ESTADO_NAO_ENCONTRADO = "Não existe um cadastro de estado com código %d";
+
     @Autowired
     private EstadoRepository estadoRepository;
 
@@ -26,9 +29,13 @@ public class EstadoService {
         try {
             estadoRepository.deleteById(estadoId);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Não existe um cadastro de estado com código %d", estadoId));
+            throw new EstadoNaoEncontradoException(String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId));
         } catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(String.format("Estado de código %d não pode ser removida, poi está em uso", estadoId));
+            throw new EntidadeEmUsoException(String.format(MSG_ESTADO_EM_USO, estadoId));
         }
+    }
+
+    public Estado buscarOuFalhar(Long estadoId) {
+        return estadoRepository.findById(estadoId).orElseThrow(() -> new EstadoNaoEncontradoException(String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId)));
     }
 }
