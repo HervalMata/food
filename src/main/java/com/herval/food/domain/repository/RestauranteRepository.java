@@ -19,7 +19,7 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
     List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 
     @Query("from Restaurante where nome like %:nome% and cozinha.id = :id")
-    List<Restaurante> consultaPorNome(String nome, @Param("id") Long cozinha);
+    List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinha);
 
     int countByCozinhaId(Long cozinha);
 
