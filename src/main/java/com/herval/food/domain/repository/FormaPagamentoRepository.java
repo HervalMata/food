@@ -1,16 +1,12 @@
 package com.herval.food.domain.repository;
 
 import com.herval.food.domain.model.FormaPagamento;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /*
  * Criado Por Herval Mata em 14/12/2019
  */
-public interface FormaPagamentoRepository {
-
-    List<FormaPagamento> listar();
-    FormaPagamento buscar(Long id);
-    FormaPagamento salvar(FormaPagamento formaPagamento);
-    void remover(FormaPagamento formaPagamento);
+@Repository
+public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, Long> {
 }

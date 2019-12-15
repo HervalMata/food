@@ -1,16 +1,29 @@
 package com.herval.food.domain.repository;
 
 import com.herval.food.domain.model.Restaurante;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 /*
  * Criado Por Herval Mata em 14/12/2019
  */
-public interface RestauranteRepository {
+@Repository
+public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante> {
 
-    List<Restaurante> listar();
-    Restaurante buscar(Long id);
-    Restaurante salvar(Restaurante restaurante);
-    void remover(Restaurante restaurante);
+    List<Restaurante> queryByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
+
+    @Query("from Restaurante where nome like %:nome% and cozinha.id = :id")
+    List<Restaurante> consultaPorNome(String nome, @Param("id") Long cozinha);
+
+    int countByCozinhaId(Long cozinha);
+
+    Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
+
+    List<Restaurante> findTop2ByNomeContaining(String nome);
 }

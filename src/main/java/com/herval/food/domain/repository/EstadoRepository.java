@@ -1,16 +1,13 @@
 package com.herval.food.domain.repository;
 
 import com.herval.food.domain.model.Estado;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 /*
  * Criado Por Herval Mata em 14/12/2019
  */
-public interface EstadoRepository {
-
-    List<Estado> listar();
-    Estado buscar(Long id);
-    Estado salvar(Estado estado);
-    void remover(Long id);
+@Repository
+public interface EstadoRepository extends JpaRepository<Estado, Long> {
 }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /*
  * Criado Por Herval Mata em 14/12/2019
@@ -28,15 +29,15 @@ public class EstadoController {
 
     @GetMapping
     public List<Estado> listar() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     @GetMapping("/{estdoId}")
     public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
-        Estado estado = estadoRepository.buscar(estadoId);
+        Optional<Estado> estado = estadoRepository.findById(estadoId);
 
-        if (estado != null) {
-            return ResponseEntity.ok(estado);
+        if (estado.isPresent()) {
+            return ResponseEntity.ok(estado.get());
         }
 
         return ResponseEntity
@@ -59,7 +60,7 @@ public class EstadoController {
     public ResponseEntity<?> atualizar(@PathVariable Long estadoId,
                                        @RequestBody Estado estado) {
         try {
-           Estado estadoAtual = estadoRepository.buscar(estadoId);
+           Estado estadoAtual = estadoRepository.findById(estadoId).orElse(null);
 
             if (estadoAtual != null) {
                 BeanUtils.copyProperties(estado, estadoAtual, "id");

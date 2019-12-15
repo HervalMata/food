@@ -6,6 +6,7 @@ import com.herval.food.domain.model.Cidade;
 import com.herval.food.domain.repository.CidadeRepository;
 import com.herval.food.domain.service.CidadeService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /*
  * Criado Por Herval Mata em 14/12/2019
@@ -29,15 +31,15 @@ public class CidadeController {
 
     @GetMapping
     public List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     @GetMapping("/{cidadeId}")
     public ResponseEntity<Cidade> buscar(@PathVariable Long cidadeId) {
-        Cidade cidade = cidadeRepository.buscar(cidadeId);
+        Optional<Cidade> cidade = cidadeRepository.findById(cidadeId);
 
         if (cidade != null) {
-            return ResponseEntity.ok(cidade);
+            return ResponseEntity.ok(cidade.get());
         }
 
         return ResponseEntity
@@ -52,19 +54,23 @@ public class CidadeController {
     }
 
     @PutMapping("/{cidadeId}")
-    public ResponseEntity<Cidade> atualizar(@PathVariable Long cidadeId,
+    public ResponseEntity<?> atualizar(@PathVariable Long cidadeId,
                                              @RequestBody Cidade cidade) {
-        Cidade cidadeAtual = cidadeRepository.buscar(cidadeId);
-
-        if (cidadeAtual != null) {
-            BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-            cidadeAtual = cidadeRepository.salvar(cidadeAtual);
-            return ResponseEntity.ok(cidadeAtual);
+        try {
+            Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElse(null);
+            if (cidadeAtual != null) {
+                BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+                cidadeAtual = cidadeService.salvar(cidadeAtual);
+                return ResponseEntity.ok(cidadeAtual);
+            }
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity
-                .notFound()
-                .build();
+
     }
 
     @DeleteMapping("/{cidadeId}")
