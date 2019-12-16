@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /*
  * Criado Por Herval Mata em 15/12/2019
@@ -20,4 +21,12 @@ public class Problema {
     private String title;
     private String detail;
     private String userMensagem;
+    private List<Object> objects;
+
+    @Getter
+    @Builder
+    public static class Object {
+        private String name;
+        private String userMessage;
+    }
 }
