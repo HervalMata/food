@@ -28,4 +28,9 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
                 .getSingleResult();
         return Optional.empty();
     }
+
+    @Override
+    public void detach(T entity) {
+        manager.detach(entity);
+    }
 }
