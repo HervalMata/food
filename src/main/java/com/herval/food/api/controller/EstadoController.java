@@ -1,9 +1,12 @@
 package com.herval.food.api.controller;
 
+import com.herval.food.api.assembler.EstadoInputDisassembler;
+import com.herval.food.api.assembler.EstadoModelAssembler;
+import com.herval.food.api.model.EstadoModel;
+import com.herval.food.api.model.input.EstadoInput;
 import com.herval.food.domain.model.Estado;
 import com.herval.food.domain.repository.EstadoRepository;
 import com.herval.food.domain.service.EstadoService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,28 +27,39 @@ public class EstadoController {
     @Autowired
     private EstadoService estadoService;
 
+    @Autowired
+    private EstadoModelAssembler estadoModelAssembler;
+
+    @Autowired
+    EstadoInputDisassembler estadoInputDisassembler;
+
     @GetMapping
-    public List<Estado> listar() {
-        return estadoRepository.findAll();
+    public List<EstadoModel> listar() {
+        List<Estado> estados = estadoRepository.findAll();
+        return estadoModelAssembler.toCollectionModel(estados);
     }
 
     @GetMapping("/{estdoId}")
-    public Estado buscar(@PathVariable Long estadoId) {
-        return estadoService.buscarOuFalhar(estadoId);
+    public EstadoModel buscar(@PathVariable Long estadoId) {
+        Estado estado = estadoService.buscarOuFalhar(estadoId);
+        return estadoModelAssembler.toModel(estado);
     }
 
     @PostMapping
-    public Estado adicionar(@RequestBody @Valid Estado estado) {
-         return estadoService.salvar(estado);
+    @ResponseStatus(HttpStatus.CREATED)
+    public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
+        Estado estado = estadoInputDisassembler.toDomainObject(estadoInput);
+        estado = estadoService.salvar(estado);
+        return estadoModelAssembler.toModel(estado);
     }
 
     @PutMapping("/{estadoId}")
-    public Estado atualizar(@PathVariable Long estadoId,
-                                       @RequestBody @Valid Estado estado) {
+    public EstadoModel atualizar(@PathVariable Long estadoId,
+                                       @RequestBody @Valid EstadoInput estadoInput) {
         Estado estadoAtual = estadoService.buscarOuFalhar(estadoId);
-
-        BeanUtils.copyProperties(estado, estadoAtual, "id");
-        return estadoService.salvar(estadoAtual);
+        estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
+        estadoAtual = estadoService.salvar(estadoAtual);
+        return estadoModelAssembler.toModel(estadoAtual);
 
     }
 
