@@ -3,6 +3,7 @@ package com.herval.food.domain.service;
 import com.herval.food.domain.exception.RestauranteNaoEncontradoException;
 import com.herval.food.domain.model.Cidade;
 import com.herval.food.domain.model.Cozinha;
+import com.herval.food.domain.model.FormaPagamento;
 import com.herval.food.domain.model.Restaurante;
 import com.herval.food.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,11 @@ public class RestauranteService {
     @Autowired
     private CozinhaService cozinhaService;
 
+    @Autowired
     private CidadeService cidadeService;
+
+    @Autowired
+    private FormaPagamentoService formaPagamentoService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -54,5 +59,21 @@ public class RestauranteService {
     public void inativar(Long restauranteId) {
         Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
         restauranteAtual.inativar();
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+        restaurante.adicionarFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+        restaurante.removerFormaPagamento(formaPagamento);
     }
 }

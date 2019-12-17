@@ -21,9 +21,6 @@ public class FormaPagamentoService {
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
 
-    @Autowired
-    private EstadoService estadoService;
-
     @Transactional
     public FormaPagamento salvar(FormaPagamento formaPagamento) {
         return formaPagamentoRepository.save(formaPagamento);
