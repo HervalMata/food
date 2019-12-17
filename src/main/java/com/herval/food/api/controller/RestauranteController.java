@@ -7,6 +7,7 @@ import com.herval.food.api.assembler.RestauranteModelAssembler;
 import com.herval.food.api.model.RestauranteModel;
 import com.herval.food.api.model.input.RestauranteInput;
 import com.herval.food.core.validation.ValidacaoException;
+import com.herval.food.domain.exception.CidadeNaoEncontradaException;
 import com.herval.food.domain.exception.CozinhaNaoEncontradaException;
 import com.herval.food.domain.exception.NegocioException;
 import com.herval.food.domain.model.Restaurante;
@@ -68,7 +69,7 @@ public class RestauranteController {
        try {
            Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
            return restauranteModelAssembler.toModel(restauranteService.salvar(restaurante));
-       } catch (CozinhaNaoEncontradaException e) {
+       } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
            throw new NegocioException(e.getMessage(), e);
        }
 
@@ -82,7 +83,7 @@ public class RestauranteController {
             Restaurante restauranteAtual = restauranteService.buscarOuFalhar(restauranteId);
             BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
             return restauranteModelAssembler.toModel(restauranteService.salvar(restauranteAtual));
-        } catch (CozinhaNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
 
@@ -128,5 +129,17 @@ public class RestauranteController {
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
         }
 
+    }
+
+    @PutMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@PathVariable Long restauranteId) {
+        restauranteService.ativar(restauranteId);
+    }
+
+    @DeleteMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativar(@PathVariable Long restauranteId) {
+        restauranteService.inativar(restauranteId);
     }
 }
