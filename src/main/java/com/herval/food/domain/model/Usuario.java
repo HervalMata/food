@@ -48,4 +48,12 @@ public class Usuario {
     public boolean senhaNaoCoincideCom(String senha) {
         return !senhaNaoCoincideCom(senha);
     }
+
+    public boolean adicionarGrupo(Grupo grupo) {
+        return getGrupos().add(grupo);
+    }
+
+    public boolean removerGrupo(Grupo grupo) {
+        return getGrupos().remove(grupo);
+    }
 }

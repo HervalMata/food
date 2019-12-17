@@ -2,6 +2,7 @@ package com.herval.food.domain.service;
 
 import com.herval.food.domain.exception.NegocioException;
 import com.herval.food.domain.exception.UsuarioNaoEncontradoException;
+import com.herval.food.domain.model.Grupo;
 import com.herval.food.domain.model.Usuario;
 import com.herval.food.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private GrupoService grupoService;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
@@ -40,5 +44,19 @@ public class UsuarioService {
 
     public Usuario buscarOuFalhar(Long usuarioId) {
         return usuarioRepository.findById(usuarioId).orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
+    }
+
+    @Transactional
+    public void associarGrupo(Long grupoId, Long usuarioId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+        usuario.adicionarGrupo(grupo);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long grupoId, Long usuarioId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = grupoService.buscarOuFalhar(grupoId);
+        usuario.removerGrupo(grupo);
     }
 }

@@ -3,6 +3,7 @@ package com.herval.food.domain.service;
 import com.herval.food.domain.exception.EntidadeEmUsoException;
 import com.herval.food.domain.exception.GrupoNaoEncontradoException;
 import com.herval.food.domain.model.Grupo;
+import com.herval.food.domain.model.Permissao;
 import com.herval.food.domain.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +22,9 @@ public class GrupoService {
     @Autowired
     private GrupoRepository grupoRepository;
 
+    @Autowired
+    private PermissaoService permissaoService;
+
     @Transactional
     public Grupo salvar(Grupo grupo) {
         return grupoRepository.save(grupo);
@@ -30,6 +34,7 @@ public class GrupoService {
     public void excluir(Long grupoId) {
         try {
             grupoRepository.deleteById(grupoId);
+            grupoRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new GrupoNaoEncontradoException(grupoId);
         } catch (DataIntegrityViolationException e) {
@@ -39,5 +44,19 @@ public class GrupoService {
 
     public Grupo buscarOuFalhar(Long grupoId) {
         return grupoRepository.findById(grupoId).orElseThrow(() -> new GrupoNaoEncontradoException(String.format(MSG_GRUPO_EM_USO, grupoId)));
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.adicionarPermissao(permissao);
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.removerrPermissao(permissao);
     }
 }
