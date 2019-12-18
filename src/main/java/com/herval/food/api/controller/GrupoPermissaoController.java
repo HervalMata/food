@@ -24,7 +24,7 @@ public class GrupoPermissaoController {
     private PermissaoModelAssembler permissaoModelAssembler;
 
     @GetMapping
-    public List<PermissaoModel> listar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+    public List<PermissaoModel> listar(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarOuFalhar(grupoId);
 
         return permissaoModelAssembler.toCollectionModel(grupo.getPermissoes());

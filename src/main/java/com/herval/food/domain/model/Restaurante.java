@@ -27,7 +27,7 @@ public class Restaurante {
     @Column(nullable = false)
     private String nome;
 
-    @Column(name = "taxa_frete", nullable = true)
+    @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     @ManyToOne//(fetch = FetchType.LAZY)
@@ -58,6 +58,12 @@ public class Restaurante {
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "restaurante_usuario_responsavel",
+            joinColumns = @JoinColumn(name = "restaurante_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    private List<Usuario> responsaveis = new ArrayList<>();
+
     public void ativar() {
         setAtivo(true);
     }
@@ -80,5 +86,21 @@ public class Restaurante {
 
     public void fechar() {
         setAberto(false);
+    }
+
+    public boolean AdicionarResponsavel(Usuario usuario) {
+        return getResponsaveis().add(usuario);
+    }
+
+    public boolean RemoverResponsavel(Usuario usuario) {
+        return getResponsaveis().remove(usuario);
+    }
+
+    public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return !aceitaFormaPagamento(formaPagamento);
+    }
+
+    private boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return getFormasPagamento().contains(formaPagamento);
     }
 }

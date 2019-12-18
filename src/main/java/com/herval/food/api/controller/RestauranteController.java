@@ -10,6 +10,7 @@ import com.herval.food.core.validation.ValidacaoException;
 import com.herval.food.domain.exception.CidadeNaoEncontradaException;
 import com.herval.food.domain.exception.CozinhaNaoEncontradaException;
 import com.herval.food.domain.exception.NegocioException;
+import com.herval.food.domain.exception.RestauranteNaoEncontradoException;
 import com.herval.food.domain.model.Restaurante;
 import com.herval.food.domain.repository.RestauranteRepository;
 import com.herval.food.domain.service.RestauranteService;
@@ -153,5 +154,25 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void fechar(@PathVariable Long restauranteId) {
         restauranteService.fechar(restauranteId);
+    }
+
+    @PutMapping("/{ativacoes}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+        try {
+            restauranteService.ativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/{ativacoes}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativarMultiplos(@RequestBody List<Long> restauranteIds) {
+        try {
+            restauranteService.inativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 }

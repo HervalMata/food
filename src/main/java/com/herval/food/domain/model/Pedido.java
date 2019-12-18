@@ -1,16 +1,16 @@
 package com.herval.food.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.herval.food.domain.exception.NegocioException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /*
  * Criado Por Herval Mata em 15/12/2019
@@ -25,6 +25,8 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String codigo;
+
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
     private BigDecimal valorTotal;
@@ -32,14 +34,15 @@ public class Pedido {
     @Embedded
     private Endereco enderecoEntrega;
 
-    private StatusPedido status;
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status = StatusPedido.CRIADO;
 
     @CreationTimestamp
-    private LocalDateTime dataCriacao;
+    private OffsetDateTime dataCriacao;
 
-    private LocalDateTime dataConfirmacao;
-    private LocalDateTime dataCancelamento;
-    private LocalDateTime dataEntrega;
+    private OffsetDateTime dataConfirmacao;
+    private OffsetDateTime dataCancelamento;
+    private OffsetDateTime dataEntrega;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -53,6 +56,46 @@ public class Pedido {
     @JoinColumn(nullable = false)
     private Usuario cliente;
 
-    @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> produtos = new ArrayList<>();
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> itens = new ArrayList<>();
+
+    public void calcularValorTotal() {
+        getItens().forEach(ItemPedido::calcularPrecoTotal);
+
+        this.subtotal = getItens().stream()
+                .map(ItemPedido::getPrecoTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.valorTotal = this.subtotal.add(this.taxaFrete);
+    }
+
+    public void confirmar() {
+        setStatus(StatusPedido.CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    public void cancelar() {
+        setStatus(StatusPedido.CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+
+    public void entregar() {
+        setStatus(StatusPedido.ENTREGUE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+
+    private void setStatus(StatusPedido novoStatus) {
+        if (getStatus().naoPodeAlterarPara(novoStatus)) {
+            throw new NegocioException(String.format("Status do pedido %d não pode ser alterado de %s para %s",
+                    getId(), getStatus().getDescricao(),
+                    novoStatus.getDescricao()));
+        }
+
+        this.status = novoStatus;
+    }
+
+    @PrePersist
+    private void gerarCodigo() {
+        setCodigo(UUID.randomUUID().toString());
+    }
 }

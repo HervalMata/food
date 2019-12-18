@@ -1,6 +1,7 @@
 package com.herval.food.api.assembler;
 
 import com.herval.food.api.model.input.RestauranteInput;
+import com.herval.food.domain.model.Cidade;
 import com.herval.food.domain.model.Cozinha;
 import com.herval.food.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,9 @@ public class RestauranteInputDisassembler {
 
     public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) {
         restaurante.setCozinha(new Cozinha());
+        if (restaurante.getEndereco() != null) {
+            restaurante.getEndereco().setCidade(new Cidade());
+        }
         modelMapper.map(restauranteInput, restaurante);
     }
 }
