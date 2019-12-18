@@ -14,7 +14,7 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping("/usuarios/{usuarioId}/grupos")
+@RequestMapping(value = "/usuarios/{usuarioId}/grupos")
 public class UsuarioGrupoController {
 
     @Autowired

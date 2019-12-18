@@ -18,7 +18,7 @@ import java.util.List;
  * Criado Por Herval Mata em 14/12/2019
  */
 @RestController
-@RequestMapping("/estados")
+@RequestMapping(value = "/estados")
 public class EstadoController {
 
     @Autowired

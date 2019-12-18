@@ -18,7 +18,7 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping("/formas-pagamento")
+@RequestMapping(value = "/formas-pagamento")
 public class FormaPagamentoController {
 
     @Autowired

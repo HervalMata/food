@@ -14,7 +14,7 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/responsaveis")
+@RequestMapping(value = "/restaurantes/{restauranteId}/responsaveis")
 public class RestauranteUsuarioResponsavelController {
 
     @Autowired

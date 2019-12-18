@@ -6,24 +6,32 @@ import com.herval.food.api.assembler.PedidoResumoModelAssembler;
 import com.herval.food.api.model.PedidoModel;
 import com.herval.food.api.model.PedidoResumoModel;
 import com.herval.food.api.model.input.PedidoInput;
+import com.herval.food.core.data.PageableTranslator;
 import com.herval.food.domain.exception.EstadoNaoEncontradoException;
 import com.herval.food.domain.exception.NegocioException;
 import com.herval.food.domain.model.Pedido;
 import com.herval.food.domain.model.Usuario;
 import com.herval.food.domain.repository.PedidoRepository;
+import com.herval.food.domain.filter.PedidoFilter;
 import com.herval.food.domain.service.EmissaoPedidoService;
+import com.herval.food.infrastructure.repository.spec.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /*
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping(value = "/pedidos")
 public class PedidoController {
 
     @Autowired
@@ -42,14 +50,19 @@ public class PedidoController {
     private PedidoInputDisassembler pedidoInputDisassembler;
 
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        List<Pedido> pedidos = pedidoRepository.findAll();
-        return pedidoResumoModelAssembler.toCollectionModel(pedidos);
+    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10)Pageable pageable) {
+        pageable = traduzirPageable(pageable);
+        Page<Pedido> pedidoPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+        List<PedidoResumoModel> pedidos = pedidoResumoModelAssembler.toCollectionModel(pedidoPage.getContent());
+        Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(
+                pedidos, pageable, pedidoPage.getTotalElements()
+        );
+        return pedidosResumoModelPage;
     }
 
-    @GetMapping("/{pedidoId}")
-    public PedidoModel buscar(@PathVariable Long pedidoId) {
-        Pedido pedido = emissaoPedidoService.buscarOuFalhar(pedidoId);
+    @GetMapping("/{codigoPedido}")
+    public PedidoModel buscar(@PathVariable String codigoPedido) {
+        Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         return pedidoModelAssembler.toModel(pedido);
     }
 
@@ -67,5 +80,20 @@ public class PedidoController {
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable apiPageable) {
+        var mapeamento = Map.of(
+                "codigo", "codigo",
+                "subtotal", "subtotal",
+                "taxaFrete", "taxaFrete",
+                "valorTotal", "valorTotal",
+                "dataCriacao", "dataCriacao",
+                "restaurante.nome", "restaurante.nome",
+                "restaurante.id", "restaurante.id",
+                "cliente.id", "cliente.id",
+                "nomeCliente", "cliente.nome"
+        );
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 }

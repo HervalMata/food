@@ -20,7 +20,7 @@ import java.util.List;
  * Criado Por Herval Mata em 14/12/2019
  */
 @RestController
-@RequestMapping("/cidades")
+@RequestMapping(value = "/cidades")
 public class CidadeController {
 
     @Autowired

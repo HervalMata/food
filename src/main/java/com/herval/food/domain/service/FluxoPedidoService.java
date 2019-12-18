@@ -1,13 +1,9 @@
 package com.herval.food.domain.service;
 
-import com.herval.food.domain.exception.NegocioException;
 import com.herval.food.domain.model.Pedido;
-import com.herval.food.domain.model.StatusPedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.OffsetDateTime;
 
 /*
  * Criado Por Herval Mata em 17/12/2019
@@ -19,20 +15,20 @@ public class FluxoPedidoService {
     private EmissaoPedidoService emissaoPedidoService;
 
     @Transactional
-    public void confirmar(Long pedidoId) {
-        Pedido pedido = emissaoPedidoService.buscarOuFalhar(pedidoId);
+    public void confirmar(String codigoPedido) {
+        Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         pedido.confirmar();
     }
 
     @Transactional
-    public void cancelar(Long pedidoId) {
-        Pedido pedido = emissaoPedidoService.buscarOuFalhar(pedidoId);
+    public void cancelar(String codigoPedido) {
+        Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         pedido.cancelar();
     }
 
     @Transactional
-    public void entregar(Long pedidoId) {
-        Pedido pedido = emissaoPedidoService.buscarOuFalhar(pedidoId);
+    public void entregar(String codigoPedido) {
+        Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         pedido.entregar();
     }
 }
