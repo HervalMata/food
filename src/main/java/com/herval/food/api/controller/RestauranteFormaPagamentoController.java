@@ -2,10 +2,12 @@ package com.herval.food.api.controller;
 
 import com.herval.food.api.assembler.FormaPagamentoModelAssembler;
 import com.herval.food.api.model.FormaPagamentoModel;
+import com.herval.food.api.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
 import com.herval.food.domain.model.Restaurante;
 import com.herval.food.domain.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,8 +16,8 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping(value = "/restaurantes/{restauranteId}/formaspagamento")
-public class RestauranteFormaPagamentoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/formaspagamento", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteFormaPagamentoController implements RestauranteFormaPagamentoControllerOpenApi {
 
     @Autowired
     private RestauranteService restauranteService;

@@ -2,6 +2,7 @@ package com.herval.food.api.controller;
 
 import com.herval.food.api.assembler.GrupoInputDisassembler;
 import com.herval.food.api.assembler.GrupoModelAssembler;
+import com.herval.food.api.openapi.controller.GrupoControllerOpenApi;
 import com.herval.food.api.model.GrupoModel;
 import com.herval.food.api.model.input.GrupoInput;
 import com.herval.food.domain.model.Grupo;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired
     private GrupoRepository grupoRepository;

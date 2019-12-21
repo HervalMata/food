@@ -4,11 +4,13 @@ import com.herval.food.api.assembler.EstadoInputDisassembler;
 import com.herval.food.api.assembler.EstadoModelAssembler;
 import com.herval.food.api.model.EstadoModel;
 import com.herval.food.api.model.input.EstadoInput;
+import com.herval.food.api.openapi.controller.EstadoControllerOpenApi;
 import com.herval.food.domain.model.Estado;
 import com.herval.food.domain.repository.EstadoRepository;
 import com.herval.food.domain.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,8 +20,8 @@ import java.util.List;
  * Criado Por Herval Mata em 14/12/2019
  */
 @RestController
-@RequestMapping(value = "/estados")
-public class EstadoController {
+@RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+public class EstadoController implements EstadoControllerOpenApi {
 
     @Autowired
     private EstadoRepository estadoRepository;

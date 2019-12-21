@@ -4,6 +4,7 @@ import com.herval.food.api.assembler.CozinhaInputDisassembler;
 import com.herval.food.api.assembler.CozinhaModelAssembler;
 import com.herval.food.api.model.CozinhaModel;
 import com.herval.food.api.model.input.CozinhaInput;
+import com.herval.food.api.openapi.controller.CozinhaControllerOpenApi;
 import com.herval.food.domain.model.Cozinha;
 import com.herval.food.domain.repository.CozinhaRepository;
 import com.herval.food.domain.service.CozinhaService;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/cozinhas")
-public class CozinhaController {
+public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;

@@ -4,12 +4,14 @@ import com.herval.food.api.assembler.FormaPagamentoInputDisassembler;
 import com.herval.food.api.assembler.FormaPagamentoModelAssembler;
 import com.herval.food.api.model.FormaPagamentoModel;
 import com.herval.food.api.model.input.FormaPagamentoInput;
+import com.herval.food.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.herval.food.domain.model.FormaPagamento;
 import com.herval.food.domain.repository.FormaPagamentoRepository;
 import com.herval.food.domain.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -24,8 +26,8 @@ import java.util.concurrent.TimeUnit;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping("/formas-pagamento")
-public class FormaPagamentoController {
+@RequestMapping(path = "/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;

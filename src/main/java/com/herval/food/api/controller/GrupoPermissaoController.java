@@ -2,10 +2,12 @@ package com.herval.food.api.controller;
 
 import com.herval.food.api.assembler.PermissaoModelAssembler;
 import com.herval.food.api.model.PermissaoModel;
+import com.herval.food.api.openapi.controller.GrupoPermissaoControllerOpenApi;
 import com.herval.food.domain.model.Grupo;
 import com.herval.food.domain.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,8 +16,8 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping(value = "/grupos/{grupoId}/permissoes")
-public class GrupoPermissaoController {
+@RequestMapping(path = "/grupos/{grupoId}/permissoes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi {
 
     @Autowired
     private GrupoService grupoService;

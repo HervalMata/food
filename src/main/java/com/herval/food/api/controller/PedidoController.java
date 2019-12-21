@@ -6,6 +6,7 @@ import com.herval.food.api.assembler.PedidoResumoModelAssembler;
 import com.herval.food.api.model.PedidoModel;
 import com.herval.food.api.model.PedidoResumoModel;
 import com.herval.food.api.model.input.PedidoInput;
+import com.herval.food.api.openapi.controller.PedidoControllerOpenApi;
 import com.herval.food.core.data.PageableTranslator;
 import com.herval.food.domain.exception.EstadoNaoEncontradoException;
 import com.herval.food.domain.exception.NegocioException;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,8 +33,8 @@ import java.util.Map;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping(value = "/pedidos")
-public class PedidoController {
+@RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired
     private PedidoRepository pedidoRepository;

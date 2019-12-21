@@ -4,6 +4,7 @@ import com.herval.food.api.assembler.ProdutoInputDisassembler;
 import com.herval.food.api.assembler.ProdutoModelAssembler;
 import com.herval.food.api.model.ProdutoModel;
 import com.herval.food.api.model.input.ProdutoInput;
+import com.herval.food.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.herval.food.domain.model.Produto;
 import com.herval.food.domain.model.Restaurante;
 import com.herval.food.domain.repository.ProdutoRepository;
@@ -11,6 +12,7 @@ import com.herval.food.domain.service.ProdutoService;
 import com.herval.food.domain.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,8 +22,8 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping(value = "/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
     
     @Autowired
     private ProdutoRepository produtoRepository;

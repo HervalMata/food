@@ -1,5 +1,6 @@
 package com.herval.food.api.controller;
 
+import com.herval.food.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.herval.food.domain.filter.VendaDiariaFilter;
 import com.herval.food.domain.model.dto.VendaDiaria;
 import com.herval.food.domain.service.VendaQueryService;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(path = "/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     @Autowired
     private VendaQueryService vendaQueryService;

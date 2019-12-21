@@ -2,10 +2,12 @@ package com.herval.food.api.controller;
 
 import com.herval.food.api.assembler.UsuarioModelAssembler;
 import com.herval.food.api.model.UsuarioModel;
+import com.herval.food.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.herval.food.domain.model.Restaurante;
 import com.herval.food.domain.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,8 +16,8 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping(value = "/restaurantes/{restauranteId}/responsaveis")
-public class RestauranteUsuarioResponsavelController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/responsaveis", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 
     @Autowired
     private RestauranteService restauranteService;

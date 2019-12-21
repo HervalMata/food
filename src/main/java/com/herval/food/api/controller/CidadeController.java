@@ -2,6 +2,7 @@ package com.herval.food.api.controller;
 
 import com.herval.food.api.assembler.CidadeInputDisassembler;
 import com.herval.food.api.assembler.CidadeModelAssembler;
+import com.herval.food.api.openapi.controller.CidadeControllerOpenApi;
 import com.herval.food.api.model.CidadeModel;
 import com.herval.food.api.model.input.CidadeInput;
 import com.herval.food.domain.exception.EstadoNaoEncontradoException;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/cidades")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired
     private CidadeRepository cidadeRepository;

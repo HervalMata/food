@@ -2,10 +2,12 @@ package com.herval.food.api.controller;
 
 import com.herval.food.api.assembler.GrupoModelAssembler;
 import com.herval.food.api.model.GrupoModel;
+import com.herval.food.api.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.herval.food.domain.model.Usuario;
 import com.herval.food.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,8 +16,8 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping(value = "/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+@RequestMapping(path = "/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 
     @Autowired
     private UsuarioService usuarioService;

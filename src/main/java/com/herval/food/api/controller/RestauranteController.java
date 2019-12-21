@@ -8,6 +8,7 @@ import com.herval.food.api.assembler.RestauranteModelAssembler;
 import com.herval.food.api.model.RestauranteModel;
 import com.herval.food.api.model.input.RestauranteInput;
 import com.herval.food.api.model.view.RestauranteView;
+import com.herval.food.api.openapi.controller.RestauranteControllerOpenApi;
 import com.herval.food.core.validation.ValidacaoException;
 import com.herval.food.domain.exception.CidadeNaoEncontradaException;
 import com.herval.food.domain.exception.CozinhaNaoEncontradaException;
@@ -20,6 +21,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -37,8 +39,8 @@ import java.util.Map;
  * Criado Por Herval Mata em 14/12/2019
  */
 @RestController
-@RequestMapping(value = "/restaurantes")
-public class RestauranteController {
+@RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 
     @Autowired
     private RestauranteRepository restauranteRepository;

@@ -5,11 +5,13 @@ import com.herval.food.api.assembler.UsuarioModelAssembler;
 import com.herval.food.api.model.UsuarioModel;
 import com.herval.food.api.model.input.SenhaInput;
 import com.herval.food.api.model.input.UsuarioInput;
+import com.herval.food.api.openapi.controller.UsuarioControllerOpenApi;
 import com.herval.food.domain.model.Usuario;
 import com.herval.food.domain.repository.UsuarioRepository;
 import com.herval.food.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,8 +21,8 @@ import java.util.List;
  * Criado Por Herval Mata em 17/12/2019
  */
 @RestController
-@RequestMapping(value = "/usuarios")
-public class UsuarioController {
+@RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

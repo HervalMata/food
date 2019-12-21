@@ -3,6 +3,7 @@ package com.herval.food.api.controller;
 import com.herval.food.api.assembler.FotoProdutoModelAssembler;
 import com.herval.food.api.model.FotoProdutoModel;
 import com.herval.food.api.model.input.FotoProdutoInput;
+import com.herval.food.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.herval.food.domain.exception.EntidadeNaoEncontradaException;
 import com.herval.food.domain.model.FotoProduto;
 import com.herval.food.domain.model.Produto;
@@ -27,8 +28,8 @@ import java.util.List;
  * Criado Por Herval Mata em 18/12/2019
  */
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/produtos/{produtoId}/foto", produces = MediaType.ALL_VALUE)
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     @Autowired
     private ProdutoService produtoService;
@@ -45,10 +46,11 @@ public class RestauranteProdutoFotoController {
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
                                           @PathVariable Long produtoId,
-                                          @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
+                                          @Valid FotoProdutoInput fotoProdutoInput,
+                                          @RequestPart(required = true) MultipartFile arquivo) throws IOException {
 
         Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
-        MultipartFile arquivo = fotoProdutoInput.getArquivo();
+        //MultipartFile arquivo = fotoProdutoInput.getArquivo();
         FotoProduto fotoProduto = new FotoProduto();
         fotoProduto.setProduto(produto);
         fotoProduto.setDescricao(fotoProdutoInput.getDescricao());
@@ -86,7 +88,7 @@ public class RestauranteProdutoFotoController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable Long restauranteId,
+    public void remover(@PathVariable Long restauranteId,
                         @PathVariable Long produtoId) {
         catalogoFotoProdutoService.excluir(restauranteId, produtoId);
     }
