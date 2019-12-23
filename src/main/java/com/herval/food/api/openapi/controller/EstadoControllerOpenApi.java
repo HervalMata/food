@@ -4,8 +4,7 @@ import com.herval.food.api.exceptionhandler.Problema;
 import com.herval.food.api.model.EstadoModel;
 import com.herval.food.api.model.input.EstadoInput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 /*
  * Criado Por Herval Mata em 19/12/2019
@@ -14,7 +13,7 @@ import java.util.List;
 public interface EstadoControllerOpenApi {
 
     @ApiOperation("Lista de estados")
-    List<EstadoModel> listar();
+    CollectionModel<EstadoModel> listar();
 
     @ApiOperation("Busca um estado por ID")
     @ApiResponses({

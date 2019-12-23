@@ -7,6 +7,7 @@ import com.herval.food.api.model.PedidoModel;
 import com.herval.food.api.model.PedidoResumoModel;
 import com.herval.food.api.model.input.PedidoInput;
 import com.herval.food.api.openapi.controller.PedidoControllerOpenApi;
+import com.herval.food.core.data.PageWrapper;
 import com.herval.food.core.data.PageableTranslator;
 import com.herval.food.domain.exception.EstadoNaoEncontradoException;
 import com.herval.food.domain.exception.NegocioException;
@@ -18,15 +19,15 @@ import com.herval.food.domain.service.EmissaoPedidoService;
 import com.herval.food.infrastructure.repository.spec.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -51,15 +52,18 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pedidoPagedResourcesAssembler;
+
+    @Override
     @GetMapping
-    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10)Pageable pageable) {
-        pageable = traduzirPageable(pageable);
-        Page<Pedido> pedidoPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
-        List<PedidoResumoModel> pedidos = pedidoResumoModelAssembler.toCollectionModel(pedidoPage.getContent());
-        Page<PedidoResumoModel> pedidosResumoModelPage = new PageImpl<>(
-                pedidos, pageable, pedidoPage.getTotalElements()
-        );
-        return pedidosResumoModelPage;
+    public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10)Pageable pageable) {
+        Pageable pageableTraduzido = traduzirPageable(pageable);
+        Page<Pedido> pedidoPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+
+        pedidoPage = new PageWrapper<>(pedidoPage, pageable);
+        return pedidoPagedResourcesAssembler
+                .toModel(pedidoPage, pedidoResumoModelAssembler);
     }
 
     @GetMapping("/{codigoPedido}")

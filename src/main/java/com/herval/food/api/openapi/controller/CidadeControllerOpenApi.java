@@ -4,8 +4,7 @@ import com.herval.food.api.exceptionhandler.Problema;
 import com.herval.food.api.model.CidadeModel;
 import com.herval.food.api.model.input.CidadeInput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 /*
  * Criado Por Herval Mata em 19/12/2019
@@ -14,7 +13,7 @@ import java.util.List;
 public interface CidadeControllerOpenApi {
 
     @ApiOperation("Lista de cidades")
-    List<CidadeModel> listar();
+    CollectionModel<CidadeModel> listar();
 
     @ApiOperation("Busca uma cidade por ID")
     @ApiResponses({

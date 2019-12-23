@@ -103,4 +103,36 @@ public class Restaurante {
     private boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
         return getFormasPagamento().contains(formaPagamento);
     }
+
+    public boolean ativacaoPermitida() {
+        return isInativo();
+    }
+
+    private boolean isInativo() {
+        return !isAtivo();
+    }
+
+    public boolean inativacaoPermitida() {
+        return isAtivo();
+    }
+
+    public boolean aberturaPermitida() {
+        return isAtivo() && isFechado();
+    }
+
+    private boolean isFechado() {
+        return !isAberto();
+    }
+
+    private boolean isAberto() {
+        return this.aberto;
+    }
+
+    private boolean isAtivo() {
+        return this.ativo;
+    }
+
+    public boolean fechamentoPermitido() {
+        return isAberto();
+    }
 }

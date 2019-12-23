@@ -9,6 +9,7 @@ import com.herval.food.domain.model.Estado;
 import com.herval.food.domain.repository.EstadoRepository;
 import com.herval.food.domain.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class EstadoController implements EstadoControllerOpenApi {
     EstadoInputDisassembler estadoInputDisassembler;
 
     @GetMapping
-    public List<EstadoModel> listar() {
+    public CollectionModel<EstadoModel> listar() {
         List<Estado> estados = estadoRepository.findAll();
         return estadoModelAssembler.toCollectionModel(estados);
     }

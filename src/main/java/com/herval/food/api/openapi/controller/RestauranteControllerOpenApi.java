@@ -2,11 +2,15 @@ package com.herval.food.api.openapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.herval.food.api.exceptionhandler.Problema;
+import com.herval.food.api.model.RestauranteApenasNomeModel;
+import com.herval.food.api.model.RestauranteBasicoModel;
 import com.herval.food.api.model.RestauranteModel;
 import com.herval.food.api.model.input.RestauranteInput;
 import com.herval.food.api.model.view.RestauranteView;
 import com.herval.food.api.openapi.model.RestauranteBasicoModeloOpenApi;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -22,10 +26,10 @@ public interface RestauranteControllerOpenApi {
                              name = "projecao", paramType = "query", type = "string")
     })
     @JsonView(RestauranteView.class)
-    List<RestauranteModel> listar();
+    CollectionModel<RestauranteBasicoModel> listar();
 
     @ApiOperation(value = "Listar restaurantes", hidden = true)
-    List<RestauranteModel> listarApenasNomes();
+    CollectionModel<RestauranteApenasNomeModel> listarApenasNomes();
 
     @ApiOperation("Busca um restaurante por ID")
     @ApiResponses({
@@ -60,7 +64,7 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 204, message = "Restaurante ativado com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problema.class)
     })
-    void ativar(
+    ResponseEntity<Void> ativar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
                     Long restauranteId);
 
@@ -69,7 +73,7 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 204, message = "Restaurante inativado com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problema.class)
     })
-    void inativar(
+    ResponseEntity<Void> inativar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
                     Long restauranteId);
 
@@ -94,7 +98,7 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 204, message = "Restaurante aberto com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problema.class)
     })
-    void abrir(
+    ResponseEntity<Void> abrir(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
                     Long restauranteId);
 
@@ -103,7 +107,7 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 204, message = "Restaurante fechado com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problema.class)
     })
-    void fechar(
+    ResponseEntity<Void> fechar(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
                     Long restauranteId);
 }

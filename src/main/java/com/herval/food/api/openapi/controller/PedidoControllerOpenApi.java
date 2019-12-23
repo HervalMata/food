@@ -6,8 +6,8 @@ import com.herval.food.api.model.PedidoResumoModel;
 import com.herval.food.api.model.input.PedidoInput;
 import com.herval.food.domain.filter.PedidoFilter;
 import io.swagger.annotations.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 /*
  * Criado Por Herval Mata em 19/12/2019
@@ -20,7 +20,7 @@ public interface PedidoControllerOpenApi {
                             name = "campos", paramType = "query", type = "string")
     })
     @ApiOperation("Pesquisa de pedidos")
-    Page<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter, Pageable pageable);
+    PagedModel<PedidoResumoModel> pesquisar(PedidoFilter pedidoFilter, Pageable pageable);
 
     @ApiImplicitParams({
             @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",

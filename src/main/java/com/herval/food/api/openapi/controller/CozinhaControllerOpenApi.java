@@ -4,8 +4,8 @@ import com.herval.food.api.exceptionhandler.Problema;
 import com.herval.food.api.model.CozinhaModel;
 import com.herval.food.api.model.input.CozinhaInput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 /*
  * Criado Por Herval Mata em 19/12/2019
@@ -13,8 +13,8 @@ import java.util.List;
 @Api(tags = "Cozinhas")
 public interface CozinhaControllerOpenApi {
 
-    @ApiOperation("Lista de cozinhas")
-    List<CozinhaModel> listar();
+    @ApiOperation("Lista de cozinhas com paginação")
+    PagedModel<CozinhaModel> listar(Pageable pageable);
 
     @ApiOperation("Busca uma cozinha por ID")
     @ApiResponses({

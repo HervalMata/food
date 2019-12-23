@@ -5,8 +5,7 @@ import com.herval.food.api.model.UsuarioModel;
 import com.herval.food.api.model.input.SenhaInput;
 import com.herval.food.api.model.input.UsuarioInput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 /*
  * Criado Por Herval Mata em 19/12/2019
@@ -15,7 +14,7 @@ import java.util.List;
 public interface UsuarioControllerOpenApi {
 
     @ApiOperation("Lista os usuários")
-    List<UsuarioModel> listar();
+    CollectionModel<UsuarioModel> listar();
 
     @ApiOperation("Busca um usuário por ID")
     @ApiResponses({

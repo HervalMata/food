@@ -10,6 +10,7 @@ import com.herval.food.domain.model.Usuario;
 import com.herval.food.domain.repository.UsuarioRepository;
 import com.herval.food.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,9 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     @Autowired
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
+    @Override
     @GetMapping
-    public List<UsuarioModel> listar() {
+    public CollectionModel<UsuarioModel> listar() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarioModelAssembler.toCollectionModel(usuarios);
     }
